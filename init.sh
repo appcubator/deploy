@@ -2,12 +2,11 @@
 LIMIT=3
 HOST=23.20.221.191
 
-for i in `head -n "$LIMIT" hostnames.txt`; do
+for i in `tail -n 109 hostnames.txt`; do
 echo "
-cd deploy
 bash container/create.sh $i
+bash container/prox.sh $i
 bash container/sleep.sh $i
 bash container/prox.sh $i --sleep
-sleep 3
 "
-done | ssh -i pk.pem deployer@"$HOST" 'bash -s'
+done | ssh -i pk.pem deployer@"$HOST" 'cd deploy && bash -s'
