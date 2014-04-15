@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# USAGE ./create.sh <deploy_id>
+# USAGE ./wake.sh <deploy_id>
 
 set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -11,5 +11,6 @@ if [ -z $1 ]; then
 fi
 
 DEPID=$1
-
-/usr/bin/docker start devmon-$DEPID
+# only run once at a time per app.
+LOCKFILE="/var/run/wake-$DEPID.lock"
+flock --nonblock $LOCKFILE /usr/bin/docker start devmon-$DEPID
