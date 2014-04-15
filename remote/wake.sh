@@ -17,6 +17,6 @@ HOST=$1
 DEPID=$2
 
 echo "
-bash container/wake.sh $i
-bash container/prox.sh $i
+bash container/wake.sh $DEPID
+bash container/prox.sh $DEPID
 " | ssh -i pk.pem deployer@"$HOST" 'cd deploy && bash -s'
