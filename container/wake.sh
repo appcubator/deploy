@@ -12,5 +12,5 @@ fi
 
 DEPID=$1
 # only run once at a time per app.
-LOCKFILE="/var/run/wake-$DEPID.lock"
+LOCKFILE="/tmp/wake-$DEPID.lock"
 flock --nonblock $LOCKFILE /usr/bin/docker start devmon-$DEPID
