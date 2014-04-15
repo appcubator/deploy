@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # USAGE ./create.sh <deploy_id>
 

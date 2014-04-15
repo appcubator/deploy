@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # USAGE ./create.sh <deploy_id>
 
@@ -13,4 +13,3 @@ fi
 DEPID=$1
 
 /usr/bin/docker start devmon-$DEPID
-$DIR/prox.sh $DEPID

@@ -1,0 +1,6 @@
+#cloud-config
+users:
+  - name: deployer
+    passwd: none
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCxfAgx1SELYciOf7gyvaRHOBYowYqZRiyywOyEzelgUmwCpEiF1MtXZrPJ7Y/HeJT9Z0BCHcAaX8GdUAKczwvEc8RyE8JEEYL1ma1C9bdZ/pdV8NUUIu8DyTMpbFwPzdVB5k1Q5U8zYcUuCf/WCkjYbccjYXvObT7DDGe64eBNIVGZQlXAv1MT9wv7vNKw15aMbV8s/jEfzQt7O1VErhMjZemV6QAeWJLRpb/JV2YaezSmf/VAjNRS5wHm1471UeauAAGQidfPgZlNw+f9/IPr9LiCH7gZmfq2LG8qoAHV+9SqWpK2JfQVZ9KnC6PeaaXJMZA7lUyFzIFaCqI0SMGR ubuntu@ip-10-204-203-78
