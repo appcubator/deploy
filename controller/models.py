@@ -1,5 +1,6 @@
 from filereader import get_lines_from_files
 
+
 class Machine(object):
     def __init__(self, name, host):
         self.name = name
@@ -7,7 +8,7 @@ class Machine(object):
 
     @classmethod
     def load_state(cls, key='*'):
-        lines = get_lines_from_files('machine', key)
+        lines = get_lines_from_files('machines', key)
         machines = {}
         for line in lines:
             tokens = line.split()
@@ -30,7 +31,7 @@ class Container(object):
         self.machine = machine
 
     @classmethod
-    def load_state(cls, key='*'):
+    def load_state(cls, machines, key='*'):
         lines = get_lines_from_files('deploy', key)
         containers = {}
         for line in lines:
@@ -45,6 +46,17 @@ class Container(object):
             if d_id in containers:
                 raise Exception('Duplicate deploy id found: %s' % d_id)
 
+            if machine_id not in machines:
+                raise Exception('Machine with this id not found: %s' % machine_id)
+
             containers[d_id] = Container(d_id, machine_id)
 
         return containers
+
+if __name__ == "__main__":
+    # stupid test
+
+    machines = Machine.load_state() # machine name => machine
+    print machines
+    containers = Container.load_state(machines) # deploy id => container
+    print containers

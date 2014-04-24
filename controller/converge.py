@@ -15,10 +15,12 @@
 #     call remote bulk_create shell script, pass to_create containers to stdin.
 #     call remote bulk_delete shell script, pass to_delete containers to stdin.
 
+
 from models import Machine, Container
 
 
-machines = Machine.load_state() # machine name => machine
-containers = Container.load_state() # deploy id => container
+machines = Machine.load_state('prod') # machine name => machine
+
+containers = Container.load_state(machines, 'prod') # deploy id => container
 
 print containers
