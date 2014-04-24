@@ -15,17 +15,10 @@
 #     call remote bulk_create shell script, pass to_create containers to stdin.
 #     call remote bulk_delete shell script, pass to_delete containers to stdin.
 
-class Machine(object):
-  def __init__(self, name, host):
-    self.name = name
-    self.host = host
-
-class Container(object):
-  def __init__(self, d_id, machine):
-    self.d_id = d_id
-    self.machine = machine
-
-machines = {}   # machine name => machine
-containers = {} # deploy id => container
+from models import Machine, Container
 
 
+machines = Machine.load_state() # machine name => machine
+containers = Container.load_state() # deploy id => container
+
+print containers
