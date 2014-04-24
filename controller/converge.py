@@ -18,9 +18,27 @@
 
 from models import Machine, Container
 
-
 machines = Machine.load_state('prod') # machine name => machine
-
 containers = Container.load_state(machines, 'prod') # deploy id => container
 
+from threading import Thread
+threads = []
+
+for m in machines.values():
+    remote_containers = Container.load_remote_state(m)
+
+    to_create = set(containers) - set(remote_containers)
+    t = Thread(target=m.bulk_create, args=(to_create,))
+    t.start()
+    threads.append(t)
+
+    to_delete = set(remote_containers) - set(containers)
+    t = Thread(target=m.bulk_destroy, args=(to_delete,))
+    t.start()
+    threads.append(t)
+
+for t in threads:
+    t.wait()
+
 print containers
+

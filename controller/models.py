@@ -24,6 +24,14 @@ class Machine(object):
             machines[machine_id] = Machine(machine_id, host_addr)
         return machines
 
+    @classmethod
+    def bulk_create(cls, containers):
+        pass
+
+    @classmethod
+    def bulk_delete(cls, containers):
+        pass
+
 
 class Container(object):
     def __init__(self, d_id, machine):
@@ -49,7 +57,9 @@ class Container(object):
             if machine_id not in machines:
                 raise Exception('Machine with this id not found: %s' % machine_id)
 
-            containers[d_id] = Container(d_id, machine_id)
+            machine = machines[machine_id]
+
+            containers[d_id] = Container(d_id, machine)
 
         return containers
 
