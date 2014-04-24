@@ -3,10 +3,14 @@
 See http://pointlessprogramming.wordpress.com/2011/02/13/python-cgi-tutorial-1/
 """
 
-# allows this script to be run from anywhere
 import os
 import sys
-os.chdir(os.path.dirname(sys.argv[0]))
+
+# Set script root in subprocesses
+os.environ['SCRIPT_ROOT'] = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
+# Modify cwd to allow this script to be run from anywhere
+os.chdir(os.path.dirname(__file__))
 
 import BaseHTTPServer
 import CGIHTTPServer
