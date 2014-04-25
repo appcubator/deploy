@@ -1,3 +1,0 @@
-alpha1 <ip1>
-alpha2 <ip2>
-alpha3 <ip3>
