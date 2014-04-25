@@ -12,6 +12,9 @@ class Machine(object):
         self.name = name
         self.host = host
 
+    def __repr__(self):
+        return "%s:%s" % (self.name, self.host)
+
     @classmethod
     def load_state(cls, key='*'):
         lines = get_lines_from_files('machines', key)
@@ -31,20 +34,16 @@ class Machine(object):
         return machines
 
 
-    @classmethod
-    def bulk_create(cls, containers):
+    def bulk_create(self, containers):
         """
         Assumes all containers are for one host only.
         """
         if len(containers) == 0:
             return
 
-        print containers
         nl_sep_deploy_ids = '\n'.join([c.d_id for c in containers])
-        print nl_sep_deploy_ids
 
-        #return #debug mode.
-        p = subprocess.Popen([j(SCRIPT_ROOT, 'remote', 'bulk_create.sh'), containers[0].machine.host],
+        p = subprocess.Popen([j(SCRIPT_ROOT, 'remote', 'bulk_create.sh'), self.host],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE,
                                stdin=subprocess.PIPE)
@@ -55,7 +54,8 @@ class Machine(object):
         pass
 
     @classmethod
-    def bulk_delete(cls, containers):
+    def bulk_destroy(cls, containers):
+        print "Deleting of containers not yet implemented."
         pass
 
 
@@ -63,6 +63,9 @@ class Container(object):
     def __init__(self, d_id, machine):
         self.d_id = d_id
         self.machine = machine
+
+    def __repr__(self):
+        return "%s@%s" % (self.d_id, self.machine.name)
 
     @classmethod
     def load_state(cls, machines, key='*'):
@@ -105,8 +108,6 @@ class Container(object):
         containers = {}
         configs = json.loads(out)
         for config in configs:
-            if 'Name' not in config:
-                continue
             name = config['Name']
             # ie, /devmon-zenrez
             if name.startswith('/devmon-'):
@@ -117,6 +118,8 @@ class Container(object):
                     raise Exception('Duplicate deploy id found: %s' % d_id)
 
                 containers[d_id] = c
+            else:
+                print 'Skipping container, not a deploy concern: ' + name
 
         return containers
 

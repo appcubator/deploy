@@ -27,18 +27,21 @@ threads = []
 for m in machines.values():
     remote_containers = Container.load_remote_state(m)
 
-    to_create = [ c for d_id, c in containers.iteritems() if d_id not in remote_containers ]
+    print 'Remote Containers', remote_containers
+
+    to_create = [ c for d_id, c in containers.iteritems() if c.machine == m and d_id not in remote_containers ]
+    print "About to create: ", to_create
     t = Thread(target=m.bulk_create, args=(to_create,))
     t.start()
     threads.append(t)
 
-    to_delete = [ c for d_id, c in remote_containers.iteritems() if d_id not in containers ]
+    to_delete = [ c for d_id, c in remote_containers.iteritems() if c.machine == m and d_id not in containers ]
     t = Thread(target=m.bulk_destroy, args=(to_delete,))
     t.start()
     threads.append(t)
 
 for t in threads:
-    t.wait()
+    t.join()
 
 print containers
 
