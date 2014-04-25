@@ -36,6 +36,7 @@ for m in machines.values():
     threads.append(t)
 
     to_delete = [ c for d_id, c in remote_containers.iteritems() if c.machine == m and d_id not in containers ]
+    print "About to destroy: ", to_delete
     t = Thread(target=m.bulk_destroy, args=(to_delete,))
     t.start()
     threads.append(t)

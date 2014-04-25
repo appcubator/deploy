@@ -53,9 +53,23 @@ class Machine(object):
         p.wait()
         pass
 
-    @classmethod
-    def bulk_destroy(cls, containers):
-        print "Deleting of containers not yet implemented."
+    def bulk_destroy(self, containers):
+        """
+        Assumes all containers are for one host only.
+        """
+        if len(containers) == 0:
+            return
+
+        nl_sep_deploy_ids = '\n'.join([c.d_id for c in containers])
+
+        p = subprocess.Popen([j(SCRIPT_ROOT, 'remote', 'bulk_destroy.sh'), self.host],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               stdin=subprocess.PIPE)
+
+        out, err = p.communicate(nl_sep_deploy_ids)
+
+        p.wait()
         pass
 
 
