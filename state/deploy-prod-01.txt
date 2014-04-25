@@ -1,0 +1,13 @@
+# Deploy ID | Machine name
+zenrez alpha1
+adshare alpha1
+quinoa-countess alpha1
+dainty-nailhead alpha1
+casual-doghouse alpha1
+marble-idealist alpha1
+quirky-paneling alpha1
+velvet-caffeine alpha1
+finest-unicycle alpha1
+trendy-painting alpha1
+nested-larkspur alpha1
+zanier-jamboree alpha1
