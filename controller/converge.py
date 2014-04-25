@@ -18,31 +18,26 @@
 
 from models import Machine, Container
 
-machines = Machine.load_state('prod') # machine name => machine
-containers = Container.load_state(machines, 'prod') # deploy id => container
+def converge(key='*'):
+    # note that this gets the machines in the `key` cluster
+    machines = Machine.load_files(key=key) # machine name => machine
 
-from threading import Thread
-threads = []
+    # note that this gets all containers accross all users.
+    # we are converging the entire `key` machine group within the cluster
+    containers = Container.load_files(machines) # deploy id => container
 
-for m in machines.values():
-    remote_containers = Container.load_remote_state(m)
+    print machines, containers
 
-    print 'Remote Containers', remote_containers
+    threads = []
+    for m in machines.values():
+        target_containers = [c for c in containers.values() if c.machine == m]
+        (to_create, to_delete, t1, t2) = m.converge(target_containers)
+        threads.append(t1)
+        threads.append(t2)
 
-    to_create = [ c for d_id, c in containers.iteritems() if c.machine == m and d_id not in remote_containers ]
-    print "About to create: ", to_create
-    t = Thread(target=m.bulk_create, args=(to_create,))
-    t.start()
-    threads.append(t)
+    for t in threads:
+        t.join()
 
-    to_delete = [ c for d_id, c in remote_containers.iteritems() if c.machine == m and d_id not in containers ]
-    print "About to destroy: ", to_delete
-    t = Thread(target=m.bulk_destroy, args=(to_delete,))
-    t.start()
-    threads.append(t)
-
-for t in threads:
-    t.join()
-
-print containers
+if __name__ == "__main__":
+    converge()
 

@@ -3,7 +3,7 @@ import glob
 
 j = os.path.join # too damn long
 
-STATE_DIR = j(os.path.dirname(__file__), '..', 'state')
+STATE_DIR = j(os.path.dirname(__file__), '..', '..', 'prodstate')
 
 def get_lines_from_files(prefix, key):
     lines = []
