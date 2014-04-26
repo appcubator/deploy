@@ -40,5 +40,6 @@ if $WAIT; then
     # the Host header tricks it to go to devmon
     until $(curl --output /dev/null --header "Host: devmon.whatever.com" --silent --head --fail http://127.0.0.1:$PORT); do
         sleep 0.75
+        echo 'wait'
     done
 fi
