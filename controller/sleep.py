@@ -15,7 +15,7 @@ def sleep(key='alpha-dev'):
 
 if __name__ == "__main__":
     # sleep all free machines
-    sleep('alpha-free')
+    #sleep('alpha-free')
     # sleep all dev machines
     sleep('alpha-dev')
 

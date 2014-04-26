@@ -20,7 +20,8 @@ def get_deployments():
     username = username.lower()
 
     if not re.match(r'^[0-9a-z]+$', username):
-        return 'invalid username, it must be alphanumeric only for now.', 400
+        if not( username.startswith('prod') and re.match(r'^[0-9a-z-\*]+$', username) ):
+            return 'invalid username, it must be alphanumeric only for now.', 400
 
     ms = Machine.load_files(key='*')
     containers = Container.load_files(ms, key=username)
