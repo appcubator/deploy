@@ -19,5 +19,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo "
 bash container/wake.sh $DEPID
-bash container/prox.sh $DEPID
+bash container/prox.sh $DEPID --wait # waits till server is up
 " | ssh -i $DIR/../pk.pem deployer@"$HOST" 'cd deploy && bash -s'
