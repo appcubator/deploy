@@ -28,15 +28,30 @@ def converge(key='*'):
 
     print machines, containers
 
-    threads = []
+    create_threads = []
+    destroy_threads = []
+    
     for m in machines.values():
         target_containers = [c for c in containers.values() if c.machine == m]
         (to_create, to_delete, t1, t2) = m.converge(target_containers)
-        threads.append(t1)
-        threads.append(t2)
+        create_threads.append(t1)
+        destroy_threads.append(t2)
 
-    for t in threads:
+    print "Starting container creation"
+    for t in create_threads:
+        t.start()
+
+    for t in create_threads:
         t.join()
+    print "Finished container creation"
+
+    print "Starting container destruction"
+    for t in destroy_threads:
+        t.start()
+
+    for t in destroy_threads:
+        t.join()
+    print "Finished container destruction"
 
 if __name__ == "__main__":
     converge()
