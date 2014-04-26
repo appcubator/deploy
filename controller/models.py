@@ -118,6 +118,25 @@ class Machine(object):
 
         p.wait()
 
+    def bulk_sleep(self, containers):
+        """
+        Sleep the given containers on this machine.
+            Assumes that containers is a collection of Container objects.
+        """
+        if len(containers) == 0:
+            return
+
+        nl_sep_deploy_ids = '\n'.join([c.d_id for c in containers])
+
+        p = subprocess.Popen([j(SCRIPT_ROOT, 'remote', 'bulk_sleep.sh'), self.host],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               stdin=subprocess.PIPE)
+
+        out, err = p.communicate(nl_sep_deploy_ids)
+
+        p.wait()
+
     def bulk_destroy(self, containers):
         """
         Destroy the given containers on this machine.
