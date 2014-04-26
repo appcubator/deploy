@@ -217,7 +217,8 @@ class Container(object):
                 raise Exception('Duplicate deploy id found: %s' % d_id)
 
             if machine_id not in machines:
-                raise Exception('Machine with this id not found: %s' % machine_id)
+                print "Warning: Skipping container since it's machine was not selected: (%s, %s)" % (d_id, machine_id)
+                continue
 
             machine = machines[machine_id]
 
