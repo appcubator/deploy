@@ -22,8 +22,8 @@ def get_deployments():
     if not re.match(r'^[0-9a-z]+$', username):
         return 'invalid username, it must be alphanumeric only for now.', 400
 
-    ms = Machine.load_state(key=username)
-    containers = Container.load_state(ms, key=username)
+    ms = Machine.load_files(key='*')
+    containers = Container.load_files(ms, key=username)
 
     return json.dumps(containers.keys())
 
@@ -32,5 +32,5 @@ def get_deployments():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=9000, debug=True)
 

@@ -118,6 +118,25 @@ class Machine(object):
 
         p.wait()
 
+    def bulk_sleep(self, containers):
+        """
+        Sleep the given containers on this machine.
+            Assumes that containers is a collection of Container objects.
+        """
+        if len(containers) == 0:
+            return
+
+        nl_sep_deploy_ids = '\n'.join([c.d_id for c in containers])
+
+        p = subprocess.Popen([j(SCRIPT_ROOT, 'remote', 'bulk_sleep.sh'), self.host],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE,
+                               stdin=subprocess.PIPE)
+
+        out, err = p.communicate(nl_sep_deploy_ids)
+
+        p.wait()
+
     def bulk_destroy(self, containers):
         """
         Destroy the given containers on this machine.
@@ -140,21 +159,20 @@ class Machine(object):
     def converge(self, target_containers):
         """
         Input the list of Containers you wish to be running on this machine.
-
+          Note: you must start the threads t1 and t2 yourself.
+          This allows you to create all the containers before destroying them on their original hosts for migrations without downtime.
         """
         remote_containers = self.load_existing_containers()
 
         print 'Remote Containers', remote_containers
 
         to_create = [ c for c in target_containers if c.machine == self and c.d_id not in remote_containers ]
-        print "About to create: ", to_create
+        print "Task created to create: ", to_create
         t1 = Thread(target=self.bulk_create, args=(to_create,))
-        t1.start()
 
         to_delete = [ c for d_id, c in remote_containers.iteritems() if c.machine == self and c not in target_containers ]
-        print "About to destroy: ", to_delete
+        print "Task created to destroy: ", to_delete
         t2 = Thread(target=self.bulk_destroy, args=(to_delete,))
-        t2.start()
 
         return (to_create, to_delete, t1, t2)
 
@@ -199,7 +217,8 @@ class Container(object):
                 raise Exception('Duplicate deploy id found: %s' % d_id)
 
             if machine_id not in machines:
-                raise Exception('Machine with this id not found: %s' % machine_id)
+                print "Warning: Skipping container since it's machine was not selected: (%s, %s)" % (d_id, machine_id)
+                continue
 
             machine = machines[machine_id]
 
