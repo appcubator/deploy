@@ -10,3 +10,10 @@ Architecture
 2. One modified Hipache instance which reads from Redis to proxy requests
 3. Several CoreOS hosts (they have docker installed) to host the apps
 4. One deployer service to ssh into the CoreOS instances and run these sysadmin scripts
+
+Directories
+-----------
+
+1. Container: bash scripts for manipulating docker containers locally
+2. Remote: scripts which ssh to call Container scripts in bulk operations
+3. Controller: python scripts which converge containers, use Remote to do it
